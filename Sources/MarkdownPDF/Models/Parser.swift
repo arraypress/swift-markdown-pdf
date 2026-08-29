@@ -132,7 +132,7 @@ enum Parser {
 
     private static func inline(of markup: Markup) -> Inline? {
         switch markup {
-        case let text as Markdown.Text:
+        case is Markdown.Text:
             return nil // handled by `inlines(of:)`, which may split one text into several
         case let emphasis as Emphasis:
             return .emphasis(inlines(of: emphasis.children))
