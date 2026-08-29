@@ -1,0 +1,20 @@
+{
+  "name": "article",
+  "description": "Serif and centred, for an essay, a long read or a piece of writing.",
+  "typeface": "serif",
+  "page": { "margin": 68, "runningInset": 28 },
+  "scale": { "body": 11, "leading": 1.5, "paragraphGap": 0.7, "blockGap": 1.1 },
+  "title": { "style": "centred", "size": 28, "weight": "bold", "byline": true, "rule": false, "logo": false, "gap": 2.6 },
+  "headings": [
+    { "size": 16, "weight": "bold", "colour": "ink", "before": 2.0, "after": 0.6 },
+    { "size": 12.5, "weight": "semibold", "colour": "ink", "before": 1.6, "after": 0.45 },
+    { "size": 10.5, "weight": "semibold", "colour": "muted", "uppercase": true, "tracking": 1.2, "before": 1.4, "after": 0.4 }
+  ],
+  "code": { "fill": "wash", "border": false, "size": 8.6, "label": false },
+  "quote": { "bar": "none", "italic": true, "colour": "ink", "inset": 24 },
+  "table": { "headerFill": "none", "striped": false, "rules": true, "size": 9.5 },
+  "lists": { "bullet": "•", "colour": "ink", "indent": 18 },
+  "links": { "colour": "accent", "underline": true },
+  "header": { "left": "none", "centre": "none", "right": "none", "rule": false, "firstPage": false },
+  "footer": { "left": "none", "centre": "number", "right": "none", "rule": false, "firstPage": true }
+}

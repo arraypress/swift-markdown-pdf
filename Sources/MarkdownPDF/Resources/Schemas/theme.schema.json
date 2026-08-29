@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/arraypress/swift-markdown-pdf/theme.schema.json",
+  "title": "Theme",
+  "description": "The look applied to a design: the brand. Every key is optional.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "typeface": {
+      "description": "A bundled family by name, or a family of your own by its files.",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "inter",
+            "sans",
+            "sourceSerif",
+            "serif"
+          ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "For diagnostics."
+            },
+            "files": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "description": "A static TrueType file."
+                  },
+                  "weight": {
+                    "type": "integer",
+                    "minimum": 100,
+                    "maximum": 900
+                  },
+                  "italic": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "path",
+                  "weight",
+                  "italic"
+                ]
+              }
+            },
+            "bundled": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "name",
+            "files"
+          ]
+        }
+      ]
+    },
+    "accent": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$",
+      "description": "Brand colour as hex."
+    },
+    "pageSize": {
+      "type": "string",
+      "enum": [
+        "A4",
+        "Letter",
+        "A5",
+        "Legal"
+      ],
+      "description": "Matched without regard to case."
+    },
+    "density": {
+      "type": "string",
+      "enum": [
+        "relaxed",
+        "normal",
+        "compact"
+      ]
+    },
+    "justified": {
+      "type": "boolean",
+      "description": "Whether body prose is set flush to both edges."
+    },
+    "logo": {
+      "type": "string",
+      "description": "A PNG or JPEG for the designs with a place for one, relative to wherever the theme came from."
+    }
+  }
+}

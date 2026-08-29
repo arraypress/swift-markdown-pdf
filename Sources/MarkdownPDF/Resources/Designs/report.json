@@ -1,0 +1,20 @@
+{
+  "name": "report",
+  "description": "A business report: title and byline, ruled headings, a running title and page numbers.",
+  "typeface": "sans",
+  "page": { "margin": 60, "runningInset": 26 },
+  "scale": { "body": 10.5, "leading": 1.45, "paragraphGap": 0.75, "blockGap": 1.0 },
+  "title": { "style": "plain", "size": 26, "weight": "bold", "byline": true, "rule": true, "logo": true, "gap": 2.2 },
+  "headings": [
+    { "size": 17, "weight": "bold", "colour": "ink", "rule": true, "before": 1.9, "after": 0.7 },
+    { "size": 13, "weight": "bold", "colour": "ink", "before": 1.5, "after": 0.45 },
+    { "size": 11, "weight": "semibold", "colour": "accent", "before": 1.2, "after": 0.35 }
+  ],
+  "code": { "fill": "wash", "border": false, "size": 8.8, "label": true },
+  "quote": { "bar": "accent", "italic": false, "colour": "muted", "inset": 14 },
+  "table": { "headerFill": "wash", "striped": false, "rules": true, "size": 9.5 },
+  "lists": { "bullet": "•", "colour": "ink", "indent": 16 },
+  "links": { "colour": "accent", "underline": false },
+  "header": { "left": "none", "centre": "none", "right": "title", "rule": true, "firstPage": false },
+  "footer": { "left": "none", "centre": "page", "right": "none", "rule": false, "firstPage": true }
+}

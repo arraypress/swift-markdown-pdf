@@ -1,0 +1,418 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/arraypress/swift-markdown-pdf/blueprint.schema.json",
+  "title": "Blueprint",
+  "description": "A MarkdownPDF design, written as data. Every key is optional: a design is a copy of another with the differences written.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "What it is called."
+    },
+    "description": {
+      "type": "string",
+      "description": "One line on what it is for."
+    },
+    "typeface": {
+      "type": "string",
+      "enum": [
+        "sans",
+        "serif"
+      ],
+      "description": "The face the design was drawn for, used when the theme names none."
+    },
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "margin": {
+          "type": "number",
+          "description": "All four margins, in points; the theme's density scales it."
+        },
+        "runningInset": {
+          "type": "number",
+          "description": "How far outside the margin the running header and footer sit."
+        }
+      }
+    },
+    "scale": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "type": "number",
+          "description": "Body text, in points."
+        },
+        "leading": {
+          "type": "number",
+          "description": "Line height as a multiple of the body size."
+        },
+        "paragraphGap": {
+          "type": "number",
+          "description": "Space after a paragraph, as a multiple of the body size."
+        },
+        "blockGap": {
+          "type": "number",
+          "description": "Space around a table, a code block or a figure, as a multiple of the body size."
+        }
+      }
+    },
+    "title": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "style": {
+          "type": "string",
+          "enum": [
+            "plain",
+            "centred",
+            "band",
+            "memo",
+            "none"
+          ]
+        },
+        "size": {
+          "type": "number",
+          "description": "Points."
+        },
+        "weight": {
+          "type": "string",
+          "enum": [
+            "regular",
+            "medium",
+            "semibold",
+            "bold"
+          ]
+        },
+        "uppercase": {
+          "type": "boolean"
+        },
+        "tracking": {
+          "type": "number"
+        },
+        "byline": {
+          "type": "boolean",
+          "description": "Subtitle, author and date under the title."
+        },
+        "rule": {
+          "type": "boolean",
+          "description": "A rule under the block."
+        },
+        "logo": {
+          "type": "boolean",
+          "description": "Whether the theme's logo is drawn beside the title."
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The front-matter keys a memo head lists, in order."
+        },
+        "gap": {
+          "type": "number",
+          "description": "Space below the block, as a multiple of the body size."
+        }
+      },
+      "description": "What the top of the first page says."
+    },
+    "headings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "size": {
+            "type": "number",
+            "description": "Points."
+          },
+          "weight": {
+            "type": "string",
+            "enum": [
+              "regular",
+              "medium",
+              "semibold",
+              "bold"
+            ]
+          },
+          "colour": {
+            "type": "string",
+            "enum": [
+              "ink",
+              "muted",
+              "accent",
+              "wash",
+              "hairline",
+              "none"
+            ]
+          },
+          "uppercase": {
+            "type": "boolean"
+          },
+          "tracking": {
+            "type": "number",
+            "description": "Letter-spacing in points."
+          },
+          "rule": {
+            "type": "boolean",
+            "description": "A rule under the heading."
+          },
+          "before": {
+            "type": "number",
+            "description": "Space above, as a multiple of the body size."
+          },
+          "after": {
+            "type": "number",
+            "description": "Space below, as a multiple of the body size."
+          },
+          "numbered": {
+            "type": "boolean",
+            "description": "1.2 before the text, counted through the document."
+          }
+        },
+        "description": "How one level of heading is set."
+      },
+      "minItems": 1,
+      "description": "By level, # first; deeper levels take the last style."
+    },
+    "code": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fill": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "accent",
+            "wash",
+            "hairline",
+            "none"
+          ]
+        },
+        "border": {
+          "type": "boolean"
+        },
+        "size": {
+          "type": "number",
+          "description": "Points, for the block."
+        },
+        "label": {
+          "type": "boolean",
+          "description": "The fence's language set small at the block's corner."
+        }
+      }
+    },
+    "quote": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "bar": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "accent",
+            "wash",
+            "hairline",
+            "none"
+          ]
+        },
+        "italic": {
+          "type": "boolean"
+        },
+        "colour": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "accent",
+            "wash",
+            "hairline",
+            "none"
+          ]
+        },
+        "inset": {
+          "type": "number",
+          "description": "Points."
+        }
+      }
+    },
+    "table": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "headerFill": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "accent",
+            "wash",
+            "hairline",
+            "none"
+          ]
+        },
+        "striped": {
+          "type": "boolean"
+        },
+        "rules": {
+          "type": "boolean",
+          "description": "Hairlines between rows."
+        },
+        "size": {
+          "type": "number",
+          "description": "Points."
+        }
+      }
+    },
+    "lists": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "bullet": {
+          "type": "string",
+          "description": "The character drawn."
+        },
+        "colour": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "accent",
+            "wash",
+            "hairline",
+            "none"
+          ]
+        },
+        "indent": {
+          "type": "number",
+          "description": "Points."
+        }
+      }
+    },
+    "links": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "colour": {
+          "type": "string",
+          "enum": [
+            "ink",
+            "muted",
+            "accent",
+            "wash",
+            "hairline",
+            "none"
+          ]
+        },
+        "underline": {
+          "type": "boolean"
+        }
+      }
+    },
+    "header": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "left": {
+          "type": "string",
+          "enum": [
+            "none",
+            "title",
+            "subtitle",
+            "author",
+            "date",
+            "page",
+            "number"
+          ]
+        },
+        "centre": {
+          "type": "string",
+          "enum": [
+            "none",
+            "title",
+            "subtitle",
+            "author",
+            "date",
+            "page",
+            "number"
+          ]
+        },
+        "right": {
+          "type": "string",
+          "enum": [
+            "none",
+            "title",
+            "subtitle",
+            "author",
+            "date",
+            "page",
+            "number"
+          ]
+        },
+        "rule": {
+          "type": "boolean",
+          "description": "A hairline between it and the page."
+        },
+        "firstPage": {
+          "type": "boolean",
+          "description": "Whether the first page has it."
+        }
+      },
+      "description": "What runs along the top or bottom of every page."
+    },
+    "footer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "left": {
+          "type": "string",
+          "enum": [
+            "none",
+            "title",
+            "subtitle",
+            "author",
+            "date",
+            "page",
+            "number"
+          ]
+        },
+        "centre": {
+          "type": "string",
+          "enum": [
+            "none",
+            "title",
+            "subtitle",
+            "author",
+            "date",
+            "page",
+            "number"
+          ]
+        },
+        "right": {
+          "type": "string",
+          "enum": [
+            "none",
+            "title",
+            "subtitle",
+            "author",
+            "date",
+            "page",
+            "number"
+          ]
+        },
+        "rule": {
+          "type": "boolean",
+          "description": "A hairline between it and the page."
+        },
+        "firstPage": {
+          "type": "boolean",
+          "description": "Whether the first page has it."
+        }
+      },
+      "description": "What runs along the top or bottom of every page."
+    }
+  }
+}

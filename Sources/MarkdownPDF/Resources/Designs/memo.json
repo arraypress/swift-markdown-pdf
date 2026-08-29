@@ -1,0 +1,20 @@
+{
+  "name": "memo",
+  "description": "A memo: To, From, Date and Re from the front matter, a rule, then the text.",
+  "typeface": "sans",
+  "page": { "margin": 62, "runningInset": 26 },
+  "scale": { "body": 10.5, "leading": 1.45, "paragraphGap": 0.75, "blockGap": 1.0 },
+  "title": { "style": "memo", "size": 30, "weight": "bold", "uppercase": true, "tracking": 2, "byline": false, "rule": true, "logo": true, "fields": ["to", "from", "cc", "date", "re"], "gap": 1.8 },
+  "headings": [
+    { "size": 12.5, "weight": "bold", "colour": "ink", "before": 1.6, "after": 0.5 },
+    { "size": 11, "weight": "semibold", "colour": "ink", "before": 1.3, "after": 0.4 },
+    { "size": 10.5, "weight": "semibold", "colour": "muted", "before": 1.1, "after": 0.3 }
+  ],
+  "code": { "fill": "wash", "border": false, "size": 8.8, "label": false },
+  "quote": { "bar": "hairline", "italic": true, "colour": "muted", "inset": 14 },
+  "table": { "headerFill": "none", "striped": false, "rules": true, "size": 9.5 },
+  "lists": { "bullet": "–", "colour": "ink", "indent": 14 },
+  "links": { "colour": "accent", "underline": false },
+  "header": { "left": "none", "centre": "none", "right": "none", "rule": false, "firstPage": false },
+  "footer": { "left": "title", "centre": "none", "right": "number", "rule": true, "firstPage": false }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "manual",
+  "description": "Technical: an accent band, numbered headings, bordered code and a running title.",
+  "typeface": "sans",
+  "page": { "margin": 58, "runningInset": 26 },
+  "scale": { "body": 10, "leading": 1.48, "paragraphGap": 0.75, "blockGap": 1.0 },
+  "title": { "style": "band", "size": 24, "weight": "bold", "byline": true, "rule": false, "logo": true, "gap": 2.2 },
+  "headings": [
+    { "size": 16, "weight": "bold", "colour": "accent", "rule": true, "before": 1.9, "after": 0.7, "numbered": true },
+    { "size": 12.5, "weight": "bold", "colour": "ink", "before": 1.5, "after": 0.45, "numbered": true },
+    { "size": 10.5, "weight": "semibold", "colour": "ink", "before": 1.2, "after": 0.35, "numbered": true }
+  ],
+  "code": { "fill": "wash", "border": true, "size": 8.6, "label": true },
+  "quote": { "bar": "accent", "italic": false, "colour": "ink", "inset": 14 },
+  "table": { "headerFill": "accent", "striped": true, "rules": false, "size": 9.2 },
+  "lists": { "bullet": "▪", "colour": "accent", "indent": 16 },
+  "links": { "colour": "accent", "underline": false },
+  "header": { "left": "title", "centre": "none", "right": "date", "rule": true, "firstPage": false },
+  "footer": { "left": "author", "centre": "none", "right": "page", "rule": false, "firstPage": true }
+}
