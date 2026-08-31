@@ -61,11 +61,7 @@ public struct Theme: Sendable, Equatable, Codable {
     /// Whether the accent is near enough black that colour should not be
     /// spent on anything — a rule in "#111111" reads as a rule, and a
     /// heading in it as a heading, not as a brand.
-    public var isMonochrome: Bool {
-        let colour = Color.hex(accent)
-        return max(colour.red, colour.green, colour.blue) < 40
-            && abs(colour.red - colour.green) < 12 && abs(colour.green - colour.blue) < 12
-    }
+    public var isMonochrome: Bool { ThemeRules.isMonochrome(accentHex: accent) }
 
     var accentColor: Color { Color.hex(accent) }
 
