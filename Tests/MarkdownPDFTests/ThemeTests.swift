@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import MarkdownPDF
+import TextPDF
 
 final class ThemeTests: XCTestCase {
 

@@ -11,6 +11,7 @@
 
 import Foundation
 import MarkdownPDF
+import TextPDF
 import XCTest
 
 final class READMEExamples: XCTestCase {

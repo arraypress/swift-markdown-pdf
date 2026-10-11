@@ -14,6 +14,7 @@
 
 import Foundation
 import TextDocx
+import TextPDF
 
 extension Manuscript {
 
