@@ -11,14 +11,13 @@ import TextPDF
 
 final class ThemeTests: XCTestCase {
 
-    func testEveryPresetIsAFileThePackageCarries() throws {
-        let folder = try XCTUnwrap(Bundle.module.url(forResource: "Themes", withExtension: nil))
-        let files = try FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil)
-            .filter { $0.pathExtension == "json" }.map { $0.deletingPathExtension().lastPathComponent }
-        XCTAssertEqual(Set(files), Set(Theme.presetNames))
-        XCTAssertEqual(Theme.presets.count, Theme.presetNames.count)
-        XCTAssertEqual(Theme.named("Navy")?.accent, "#1F3A5F")
-        XCTAssertNil(Theme.named("sepia"))
+    func testEveryPresetReadsUnderItsName() throws {
+        XCTAssertEqual(ThemePresets.problems, [])
+        XCTAssertEqual(ThemePresets.names, ["plain", "navy", "classic", "american"])
+        XCTAssertEqual(ThemePresets.all.count, ThemePresets.names.count)
+        XCTAssertEqual(ThemePresets.named("Navy")?.accent, "#1F3A5F")
+        XCTAssertEqual(ThemePresets.plain, Theme(), "plain is the theme with nothing set")
+        XCTAssertNil(ThemePresets.named("sepia"))
     }
 
     func testAThemeSurvivesJSONAndNamesItsChoicesInAnyCase() throws {
@@ -32,6 +31,12 @@ final class ThemeTests: XCTestCase {
         XCTAssertNil(try JSONDecoder().decode(Theme.self, from: Data("{}".utf8)).typeface, "no typeface is no preference")
     }
 
+    func testAMisspeltThemeKeyIsRefusedNotIgnored() {
+        XCTAssertThrowsError(try JSONDecoder().decode(Theme.self, from: Data(##"{ "acent": "#1F3A5F" }"##.utf8))) { error in
+            XCTAssertEqual(Decoding.describe(error), "acent is not a theme field — did you mean accent?")
+        }
+    }
+
     func testMonochromeIsNearBlack() {
         XCTAssertTrue(Theme(accent: "#111111").isMonochrome)
         XCTAssertTrue(Theme(accent: "#000000").isMonochrome)
@@ -40,9 +45,8 @@ final class ThemeTests: XCTestCase {
 
     func testATypefaceOfYourOwnIsUsed() throws {
         // The bundled files stand in for somebody's own family.
-        let fonts = try XCTUnwrap(Bundle.module.url(forResource: "Fonts", withExtension: nil))
-        let custom = Typeface.custom(name: "Mine", regular: fonts.appendingPathComponent("SourceSerif4-Regular.ttf"),
-                                     bold: fonts.appendingPathComponent("SourceSerif4-Bold.ttf"))
+        let custom = Typeface.custom(name: "Mine", regular: try XCTUnwrap(Typography.bundledFile("SourceSerif4-Regular")),
+                                     bold: try XCTUnwrap(Typography.bundledFile("SourceSerif4-Bold")))
         let data = try Manuscript(markdown: "# Hi\n\n**bold** and plain").render(design: .plain, theme: Theme(typeface: custom))
         XCTAssertTrue(data.contains(Data("SourceSerif".utf8)))
         XCTAssertFalse(data.contains(Data("Inter-Regular".utf8)), "the design's own face should not be embedded when a theme names one")

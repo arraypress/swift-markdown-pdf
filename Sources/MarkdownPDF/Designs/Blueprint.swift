@@ -14,7 +14,9 @@
 //  own is a copy of one of these files with the choices changed.
 //
 
+import DocumentTheme
 import Foundation
+import RecipeKit
 import TextPDF
 
 /// A design, written as data.
@@ -399,6 +401,7 @@ extension Blueprint {
     /// with the differences written, and a file naming nothing but its
     /// `name` is the plain design.
     public init(from decoder: Decoder) throws {
+        try decoder.refuseUnknownKeys(CodingKeys.self, noun: "design")
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(
             name: try c.value(.name, or: "custom"),
@@ -418,30 +421,33 @@ extension Blueprint {
         )
     }
 
-    enum CodingKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey, CaseIterable {
         case name, description, typeface, page, scale, title, headings, code, quote, table, lists, links, header, footer
     }
 }
 
 extension Blueprint.Page {
     public init(from decoder: Decoder) throws {
+        try decoder.refuseUnknownKeys(CodingKeys.self, noun: "design")
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(margin: try c.value(.margin, or: 58), runningInset: try c.value(.runningInset, or: 26))
     }
-    enum CodingKeys: String, CodingKey { case margin, runningInset }
+    enum CodingKeys: String, CodingKey, CaseIterable { case margin, runningInset }
 }
 
 extension Blueprint.Scale {
     public init(from decoder: Decoder) throws {
+        try decoder.refuseUnknownKeys(CodingKeys.self, noun: "design")
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(body: try c.value(.body, or: 10.5), leading: try c.value(.leading, or: 1.45),
                   paragraphGap: try c.value(.paragraphGap, or: 0.75), blockGap: try c.value(.blockGap, or: 1.0))
     }
-    enum CodingKeys: String, CodingKey { case body, leading, paragraphGap, blockGap }
+    enum CodingKeys: String, CodingKey, CaseIterable { case body, leading, paragraphGap, blockGap }
 }
 
 extension Blueprint.TitleBlock {
     public init(from decoder: Decoder) throws {
+        try decoder.refuseUnknownKeys(CodingKeys.self, noun: "design")
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(
             style: try c.choice(.style, or: .plain, called: "title style"),
@@ -456,11 +462,12 @@ extension Blueprint.TitleBlock {
             gap: try c.value(.gap, or: 2.0)
         )
     }
-    enum CodingKeys: String, CodingKey { case style, size, weight, uppercase, tracking, byline, rule, logo, fields, gap }
+    enum CodingKeys: String, CodingKey, CaseIterable { case style, size, weight, uppercase, tracking, byline, rule, logo, fields, gap }
 }
 
 extension Blueprint.HeadingStyle {
     public init(from decoder: Decoder) throws {
+        try decoder.refuseUnknownKeys(CodingKeys.self, noun: "design")
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(
             size: try c.value(.size, or: 14),
@@ -474,61 +481,67 @@ extension Blueprint.HeadingStyle {
             numbered: try c.value(.numbered, or: false)
         )
     }
-    enum CodingKeys: String, CodingKey { case size, weight, colour, uppercase, tracking, rule, before, after, numbered }
+    enum CodingKeys: String, CodingKey, CaseIterable { case size, weight, colour, uppercase, tracking, rule, before, after, numbered }
 }
 
 extension Blueprint.CodeStyle {
     public init(from decoder: Decoder) throws {
+        try decoder.refuseUnknownKeys(CodingKeys.self, noun: "design")
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(fill: try c.choice(.fill, or: .wash, called: "fill"), border: try c.value(.border, or: false),
                   size: try c.value(.size, or: 8.8), label: try c.value(.label, or: true))
     }
-    enum CodingKeys: String, CodingKey { case fill, border, size, label }
+    enum CodingKeys: String, CodingKey, CaseIterable { case fill, border, size, label }
 }
 
 extension Blueprint.QuoteStyle {
     public init(from decoder: Decoder) throws {
+        try decoder.refuseUnknownKeys(CodingKeys.self, noun: "design")
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(bar: try c.choice(.bar, or: .accent, called: "bar"), italic: try c.value(.italic, or: false),
                   colour: try c.choice(.colour, or: .muted, called: "colour"), inset: try c.value(.inset, or: 14))
     }
-    enum CodingKeys: String, CodingKey { case bar, italic, colour, inset }
+    enum CodingKeys: String, CodingKey, CaseIterable { case bar, italic, colour, inset }
 }
 
 extension Blueprint.TableStyle {
     public init(from decoder: Decoder) throws {
+        try decoder.refuseUnknownKeys(CodingKeys.self, noun: "design")
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(headerFill: try c.choice(.headerFill, or: .wash, called: "header fill"),
                   striped: try c.value(.striped, or: false), rules: try c.value(.rules, or: true),
                   size: try c.value(.size, or: 9.5))
     }
-    enum CodingKeys: String, CodingKey { case headerFill, striped, rules, size }
+    enum CodingKeys: String, CodingKey, CaseIterable { case headerFill, striped, rules, size }
 }
 
 extension Blueprint.ListStyle {
     public init(from decoder: Decoder) throws {
+        try decoder.refuseUnknownKeys(CodingKeys.self, noun: "design")
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(bullet: try c.value(.bullet, or: "•"), colour: try c.choice(.colour, or: .ink, called: "colour"),
                   indent: try c.value(.indent, or: 16))
     }
-    enum CodingKeys: String, CodingKey { case bullet, colour, indent }
+    enum CodingKeys: String, CodingKey, CaseIterable { case bullet, colour, indent }
 }
 
 extension Blueprint.LinkStyle {
     public init(from decoder: Decoder) throws {
+        try decoder.refuseUnknownKeys(CodingKeys.self, noun: "design")
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(colour: try c.choice(.colour, or: .accent, called: "colour"), underline: try c.value(.underline, or: false))
     }
-    enum CodingKeys: String, CodingKey { case colour, underline }
+    enum CodingKeys: String, CodingKey, CaseIterable { case colour, underline }
 }
 
 extension Blueprint.Running {
     public init(from decoder: Decoder) throws {
+        try decoder.refuseUnknownKeys(CodingKeys.self, noun: "design")
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(left: try c.choice(.left, or: .none, called: "running token"),
                   centre: try c.choice(.centre, or: .none, called: "running token"),
                   right: try c.choice(.right, or: .none, called: "running token"),
                   rule: try c.value(.rule, or: false), firstPage: try c.value(.firstPage, or: false))
     }
-    enum CodingKeys: String, CodingKey { case left, centre, right, rule, firstPage }
+    enum CodingKeys: String, CodingKey, CaseIterable { case left, centre, right, rule, firstPage }
 }

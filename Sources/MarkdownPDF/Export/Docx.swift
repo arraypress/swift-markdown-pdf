@@ -19,11 +19,11 @@ import TextPDF
 extension Manuscript {
 
     /// The finished `.docx`.
-    public func docx(theme: Theme = .plain) -> Data {
+    public func docx(theme: Theme = Theme()) -> Data {
         docxDocument(theme: theme).data()
     }
 
-    public func saveDocx(to url: URL, theme: Theme = .plain) throws {
+    public func saveDocx(to url: URL, theme: Theme = Theme()) throws {
         try docx(theme: theme).write(to: url, options: .atomic)
     }
 
@@ -34,7 +34,7 @@ extension Manuscript {
 
     /// The document before it is written, for a caller who wants to add
     /// to it.
-    public func docxDocument(theme: Theme = .plain) -> Docx {
+    public func docxDocument(theme: Theme = Theme()) -> Docx {
         var doc = Docx(
             page: Docx.Page(size: theme.pageSize == .letter ? .letter : .a4,
                             margins: Docx.Page.Margins(all: 60 * theme.density.margin)),

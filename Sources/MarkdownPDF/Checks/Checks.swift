@@ -73,7 +73,7 @@ public struct Report: Sendable {
 extension Manuscript {
 
     /// Renders the document and reports what a reader would notice.
-    public func check(design: Blueprint, theme: Theme = .plain) throws -> Report {
+    public func check(design: Blueprint, theme: Theme = Theme()) throws -> Report {
         let pdf = try document(design: design, theme: theme)
         var findings = Checks.structure(self)
         findings += Checks.pictures(self)
@@ -82,7 +82,7 @@ extension Manuscript {
         return Report(findings: findings.sorted { $0.severity < $1.severity }, pages: pdf.pageCount(), wordCount: wordCount)
     }
 
-    public func check(design: DesignKind = .report, theme: Theme = .plain) throws -> Report {
+    public func check(design: DesignKind = .report, theme: Theme = Theme()) throws -> Report {
         try check(design: design.blueprint, theme: theme)
     }
 }

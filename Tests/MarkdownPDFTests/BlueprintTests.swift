@@ -16,12 +16,25 @@ final class BlueprintTests: XCTestCase {
 
     private static let stamped = Date(timeIntervalSince1970: 1_776_000_000)
 
-    func testEveryDesignIsAFileThePackageCarries() throws {
-        let folder = try XCTUnwrap(Bundle.module.url(forResource: "Designs", withExtension: nil))
-        let files = try FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil)
-            .filter { $0.pathExtension == "json" }.map { $0.deletingPathExtension().lastPathComponent }
-        XCTAssertEqual(Set(files), Set(DesignKind.allCases.map(\.rawValue)))
+    func testTheCatalogueReadsStrictlyUnderKebabNames() throws {
+        XCTAssertEqual(Blueprint.catalogueProblems, [])
+        XCTAssertEqual(DesignCatalogText.all.map(\.name), DesignKind.allCases.map(\.rawValue))
         XCTAssertEqual(Blueprint.starting.count, DesignKind.allCases.count)
+    }
+
+    func testAMisspeltKeyIsRefusedWithTheOneItMeant() {
+        func refusal(_ json: String) -> String {
+            do { _ = try JSONDecoder().decode(Blueprint.self, from: Data(json.utf8)); return "(read)" } catch {
+                return Decoding.describe(error)
+            }
+        }
+        XCTAssertEqual(refusal(#"{ "nmae": "mine" }"#), "nmae is not a design field — did you mean name?")
+        XCTAssertEqual(refusal(#"{ "page": { "marign": 40 } }"#), "page.marign is not a design field — did you mean page.margin?")
+        XCTAssertEqual(refusal(#"{ "headings": [ { "size": 20 }, { "sise": 14 } ] }"#),
+                       "headings.1.sise is not a design field — did you mean headings.1.size?")
+        XCTAssertEqual(refusal(#"{ "footer": { "centre": "page", "zebra": true } }"#),
+                       "footer.zebra is not a design field (footer.left, footer.centre, footer.right, footer.rule, footer.firstPage)")
+        XCTAssertEqual(refusal(#"{ "page": { "margin": "wide" } }"#), #""page.margin" should be a number"#)
     }
 
     func testEveryDesignRoundTripsThroughJSON() throws {

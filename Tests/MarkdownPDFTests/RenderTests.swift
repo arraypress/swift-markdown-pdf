@@ -100,12 +100,12 @@ final class RenderTests: XCTestCase {
 
     func testTheThemeChangesThePageAndTheFace() throws {
         let manuscript = Manuscript(markdown: Fixtures.everything)
-        let letter = try XCTUnwrap(PDFDocument(data: try manuscript.render(design: .plain, theme: .american)))
+        let letter = try XCTUnwrap(PDFDocument(data: try manuscript.render(design: .plain, theme: ThemePresets.american)))
         XCTAssertEqual(Int(try XCTUnwrap(letter.page(at: 0)).bounds(for: .mediaBox).width), 612)
 
-        let serif = try manuscript.render(design: .plain, theme: .classic)
+        let serif = try manuscript.render(design: .plain, theme: ThemePresets.classic)
         XCTAssertTrue(serif.contains(Data("SourceSerif".utf8)), "the classic theme sets the serif")
-        let sans = try manuscript.render(design: .plain, theme: .plain)
+        let sans = try manuscript.render(design: .plain, theme: ThemePresets.plain)
         XCTAssertTrue(sans.contains(Data("Inter".utf8)))
     }
 

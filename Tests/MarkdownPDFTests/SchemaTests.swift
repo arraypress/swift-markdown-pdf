@@ -104,11 +104,6 @@ final class SchemaTests: XCTestCase {
         catch let mismatch as Mismatch { XCTFail("\(label) against \(which.filename): \(mismatch)") }
     }
 
-    private func files(in folder: String) throws -> [URL] {
-        let url = try XCTUnwrap(Bundle.module.url(forResource: folder, withExtension: nil))
-        return try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
-            .filter { $0.pathExtension == "json" }
-    }
 
     // MARK: The schemas themselves
 
@@ -123,14 +118,14 @@ final class SchemaTests: XCTestCase {
     }
 
     func testEveryBundledDesignFitsTheBlueprintSchema() throws {
-        for file in try files(in: "Designs") {
-            try check(try Data(contentsOf: file), against: .blueprint, file.lastPathComponent)
+        for entry in DesignCatalogText.all {
+            try check(Data(entry.json.utf8), against: .blueprint, entry.name)
         }
     }
 
     func testEveryThemePresetFitsTheThemeSchema() throws {
-        for file in try files(in: "Themes") {
-            try check(try Data(contentsOf: file), against: .theme, file.lastPathComponent)
+        for entry in ThemeCatalogText.all {
+            try check(Data(entry.json.utf8), against: .theme, entry.name)
         }
     }
 

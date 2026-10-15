@@ -6,11 +6,13 @@
 //
 //  The designs the package carries, and how a design file is read.
 //
-//  A design is a JSON file in `Resources/Designs/`. The Swift here only
-//  names them, reads them, and writes one out for somebody to start from.
+//  A design is JSON, compiled in (`Support/DesignCatalogText.swift`). The
+//  Swift here only names them, reads them strictly, and writes one out for
+//  somebody to start from.
 //
 
 import Foundation
+import RecipeKit
 
 /// The bundled designs, by name.
 public enum DesignKind: String, CaseIterable, Sendable {
@@ -41,7 +43,7 @@ public enum DesignKind: String, CaseIterable, Sendable {
 extension Blueprint {
 
     /// Every bundled design, read once.
-    public static let starting: [Blueprint] = bundledNames.map { read($0) }
+    public static let starting: [Blueprint] = DesignCatalogText.all.map { read($0.name, $0.json) }
 
     /// The bundled designs' names, in the order they are listed.
     public static let bundledNames = DesignKind.allCases.map(\.rawValue)
@@ -53,27 +55,45 @@ extension Blueprint {
     /// gets nil instead.
     public static func bundled(_ name: String) -> Blueprint {
         guard let design = starting.first(where: { $0.name == name }) else {
-            preconditionFailure("The bundled design \(name).json is not in the package")
+            preconditionFailure("The bundled design \(name) is not in the package")
         }
         return design
     }
 
-    private static func read(_ name: String) -> Blueprint {
-        guard let url = Bundle.module.url(forResource: name, withExtension: "json", subdirectory: "Designs") else {
-            preconditionFailure("The bundled design \(name).json is not in the package")
+    /// Every problem with the bundled designs: one that does not read
+    /// strictly, a name that is not kebab-case, listed twice, not the one its
+    /// entry is filed under, or not a ``DesignKind``. A test asserts there
+    /// are none, so a bad entry fails the build's tests rather than a run.
+    public static var catalogueProblems: [String] {
+        var seen = Set<String>()
+        var found = DesignCatalogText.all.flatMap { entry -> [String] in
+            var problems = StyleCatalogs.nameProblems(entry.name, seen: &seen)
+            do {
+                let design = try JSONDecoder().decode(Blueprint.self, from: Data(entry.json.utf8))
+                if design.name != entry.name { problems.append("\(entry.name): calls itself \(design.name)") }
+            } catch {
+                problems.append("\(entry.name): \(Decoding.describe(error))")
+            }
+            return problems
         }
-        do {
-            let design = try Blueprint(contentsOf: url)
-            precondition(design.name == name, "\(name).json calls itself \(design.name)")
-            return design
-        } catch {
-            preconditionFailure("The bundled design \(name).json does not decode: \(Decoding.describe(error))")
+        let names = Set(DesignCatalogText.all.map(\.name))
+        found += DesignKind.allCases.map(\.rawValue).filter { !names.contains($0) }.map { "\($0): no design" }
+        return found
+    }
+
+    /// A bundled design's JSON, read. A design is part of the package, so one
+    /// that does not read is a build fault, and ``catalogueProblems`` is the
+    /// test for it.
+    private static func read(_ name: String, _ json: String) -> Blueprint {
+        do { return try JSONDecoder().decode(Blueprint.self, from: Data(json.utf8)) } catch {
+            preconditionFailure("The bundled design \(name) does not read: \(Decoding.describe(error))")
         }
     }
 
     // MARK: Files
 
-    /// Reads a design from a file.
+    /// Reads a design from a file, strictly: a key a design does not have is
+    /// refused by name, with the one it was probably meant to be.
     public init(contentsOf url: URL) throws {
         self = try JSONDecoder().decode(Blueprint.self, from: try Data(contentsOf: url))
     }

@@ -42,7 +42,7 @@ Every design is rendered from the same sample under [Examples/](Examples/).
 
 ```swift
 try manuscript.save(to: url, design: .memo)
-try manuscript.save(to: url, design: .article, theme: .classic)
+try manuscript.save(to: url, design: .article, theme: ThemePresets.classic)
 let data = try manuscript.render(design: .manual, theme: Theme(accent: "#1F3A5F"))
 ```
 
@@ -68,10 +68,10 @@ Theme(accent: "#1F3A5F"),                         // an ink blue on rules, headi
 Theme(typeface: .sourceSerif),                    // the serif, whatever the design was drawn for
 Theme(pageSize: .letter, density: .compact),      // US paper, tighter
 Theme(justified: true, logo: "logo.png"),         // flush edges, a logo where the design has a place
-Theme.named("navy"),                              // a preset, from its file
+ThemePresets.named("navy"),                       // a preset, by name
 ```
 
-The presets — `plain`, `navy`, `classic`, `american` — are JSON files in the package's resources, the way the designs are. A theme is the brand and a design is the arrangement, so one theme makes a report, a memo and an article that visibly belong together — and its fields are the same handful the family's other document libraries read.
+The presets — `plain`, `navy`, `classic`, `american` — are JSON compiled into the package, the way the designs are. A theme is the brand and a design is the arrangement, so one theme makes a report, a memo and an article that visibly belong together. `Theme`, `Typeface`, the bundled fonts and the reading rules are [swift-document-theme](https://github.com/arraypress/swift-document-theme)'s, re-exported here and shared with the résumé library, so one `brand.json` dresses both (`scheme` and `tint` are for résumés: a Markdown document is always light). `Theme(contentsOf:)` reads a file, taking its paths from the file's own folder.
 
 ## As a Word document, as text
 
@@ -103,13 +103,17 @@ let json = try DesignKind.report.blueprint.encoded()   // the report, to start f
 
 A blueprint is the page, the scale, the title block, how each level of heading is set, and what code, quotes, tables and lists look like. Every key is optional — a file that says only `{ "name": "mine" }` is the plain design. Colours are named by role (`ink`, `muted`, `accent`, `wash`, `hairline`) so a design works under any theme.
 
+Reading is strict: a key a design or a theme does not have is refused by its path, with the one it was probably meant to be — `page.marign is not a design field — did you mean page.margin?` — never ignored. The bundled designs and presets are checked the same way by the tests (`Blueprint.catalogueProblems`, `ThemePresets.problems`: every one reads strictly, under a unique kebab-case name that is its own).
+
+There are no resource bundles: the designs, presets and schema are compiled in as strings, and the fonts are swift-document-theme's.
+
 ## The schemas
 
 ```swift
 let schema = Schema.blueprint.json               // JSON Schema, draft 2020-12
 ```
 
-One for a design and one for a theme. The tests validate every file the package carries against them.
+One for a design and one for a theme (the shared one, `ThemeSchema`). The tests validate every design and preset the package carries against them.
 
 ## What Markdown is covered
 
@@ -123,6 +127,8 @@ Parsing is CommonMark plus the GFM extensions the parser enables — tables, str
 ## Built on
 
 - [swift-text-pdf](https://github.com/arraypress/swift-text-pdf) — the writer: text, links, images, embedded fonts, bookmarks
+- [swift-document-theme](https://github.com/arraypress/swift-document-theme) — the theme, its fonts and the fill-in reading rules, shared with the résumé library
+- [swift-recipe-kit](https://github.com/arraypress/swift-recipe-kit) — the strict reading
 - [swift-text-docx](https://github.com/arraypress/swift-text-docx) — the Word writer
 - [swift-markdown](https://github.com/apple/swift-markdown) — Apple's CommonMark + GFM parser
 

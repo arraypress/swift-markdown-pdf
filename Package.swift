@@ -20,6 +20,11 @@ let package = Package(
         // where a hand-written parser goes wrong quietly, and quietly is
         // the one way this library must not fail.
         .package(url: "https://github.com/apple/swift-markdown.git", from: "0.8.0"),
+        // The theme — typeface and its bundled fonts, accent, page, density —
+        // shared with the résumé library, so one brand file dresses both.
+        .package(url: "https://github.com/arraypress/swift-document-theme.git", from: "0.1.0"),
+        // Strict reading: a key a design does not have is refused, by name.
+        .package(url: "https://github.com/arraypress/swift-recipe-kit.git", from: "0.3.0"),
     ],
     targets: [
         .target(
@@ -28,15 +33,11 @@ let package = Package(
                 .product(name: "TextPDF", package: "swift-text-pdf"),
                 .product(name: "TextDocx", package: "swift-text-docx"),
                 .product(name: "Markdown", package: "swift-markdown"),
-            ],
-            resources: [
-                .copy("Resources/Fonts"),
-                // The designs themselves. A design is a JSON file; the Swift
-                // only names it.
-                .copy("Resources/Designs"),
-                .copy("Resources/Schemas"),
-                .copy("Resources/Themes"),
+                .product(name: "DocumentTheme", package: "swift-document-theme"),
+                .product(name: "RecipeKit", package: "swift-recipe-kit"),
             ]
+            // No resources: the designs, presets and schema are compiled in
+            // (Support/*Text.swift) and the fonts are DocumentTheme's.
         ),
         .testTarget(name: "MarkdownPDFTests", dependencies: ["MarkdownPDF"]),
 

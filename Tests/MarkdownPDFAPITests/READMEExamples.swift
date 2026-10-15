@@ -36,7 +36,7 @@ final class READMEExamples: XCTestCase {
         let manuscript = Manuscript(markdown: "# Hi\n\nthere")
         let url = out
         try manuscript.save(to: url, design: .memo)
-        try manuscript.save(to: url, design: .article, theme: .classic)
+        try manuscript.save(to: url, design: .article, theme: ThemePresets.classic)
         let data = try manuscript.render(design: .manual, theme: Theme(accent: "#1F3A5F"))
         _ = data
     }
@@ -47,7 +47,7 @@ final class READMEExamples: XCTestCase {
         Theme(typeface: .sourceSerif),                    // the serif, whatever the design was drawn for
         Theme(pageSize: .letter, density: .compact),      // US paper, tighter
         Theme(justified: true, logo: "logo.png"),         // flush edges, a logo where the design has a place
-        Theme.named("navy"),                              // a preset, from its file
+        ThemePresets.named("navy"),                       // a preset, by name
         ]
         XCTAssertEqual(themes.count, 5)
     }

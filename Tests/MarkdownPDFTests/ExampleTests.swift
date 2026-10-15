@@ -70,8 +70,8 @@ final class ExampleTests: XCTestCase {
 
     func testEveryThemePreset() throws {
         let sample = try Self.sample()
-        for name in Theme.presetNames {
-            let theme = try XCTUnwrap(Theme.named(name))
+        for name in ThemePresets.names {
+            let theme = try XCTUnwrap(ThemePresets.named(name))
             try put(try sample.render(design: .report, theme: theme, creationDate: Self.stamped), "themes/\(name).pdf")
         }
     }
